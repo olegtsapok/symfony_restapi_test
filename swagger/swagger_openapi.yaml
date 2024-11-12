@@ -1,0 +1,451 @@
+openapi: 3.0.0
+info:
+  title: Companies and Employees Api
+  version: 1.0.0
+  contact:
+    email: tsapok.oleg@gmail.com
+    
+servers:
+  - url: http://staging-api.example.com/api
+    description: Internal staging server for testing
+    
+paths:
+  /company/list:
+    get:
+      summary: List
+      tags:
+        - Company
+      parameters:
+        - in: query
+          name: access_token
+          schema:
+            type: string
+          description: String of access_token
+          required: true
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: Number of records to get
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: Offset of returned records
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: true
+                data:
+                    - id: 1
+                      name: name1
+                      nip: "1234567891"
+                      address: address1
+                      city: city1
+                      postal_code: 12-121
+                    - id: 2
+                      name: name2
+                      nip: "1234567892"
+                      address: address2
+                      city: city2
+                      postal_code: 12-122
+  /company/new:
+    post:
+      summary: Create
+      tags:
+        - Company
+      parameters:
+        - in: query
+          name: access_token
+          schema:
+            type: string
+          description: String of access_token
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                  name: name1
+                  nip: "1234567891"
+                  address: address1
+                  city: city1
+                  postal_code: 12-123
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: true
+                data:
+                  id: 1
+                  name: name1
+                  nip: "1234567891"
+                  address: address1
+                  city: city1
+                  postal_code: 12-123
+  /company/{id_read}:
+    get:
+      summary: Read
+      tags:
+        - Company
+      parameters:
+        - in: query
+          name: access_token
+          schema:
+            type: string
+          description: String of access_token
+          required: true
+        - in: path
+          name: id_read
+          schema:
+            type: integer
+          description: Id of company
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: true
+                data:
+                  id: 1
+                  name: name1
+                  nip: "1234567891"
+                  address: address1
+                  city: city1
+                  postal_code: 12-123
+        '404':
+          description: Not found
+  /company/{id_edit}:
+    put:
+      summary: Edit
+      tags:
+        - Company
+      parameters:
+        - in: query
+          name: access_token
+          schema:
+            type: string
+          description: String of access_token
+          required: true
+        - in: path
+          name: id_edit
+          schema:
+            type: integer
+          description: Id of company
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                  name: name1
+                  nip: "1234567891"
+                  address: address1
+                  city: city1
+                  postal_code: 12-123
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: true
+                data:
+                  id: 1
+                  name: name1
+                  nip: "1234567891"
+                  address: address1
+                  city: city1
+                  postal_code: 12-123
+        '404':
+          description: Not found
+  /company/{id_delete}:
+    delete:
+      summary: Delete
+      tags:
+        - Company
+      parameters:
+        - in: query
+          name: access_token
+          schema:
+            type: string
+          description: String of access_token
+          required: true
+        - in: path
+          name: id_delete
+          schema:
+            type: integer
+          description: Id of company
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: true
+                message: Deleted
+        '404':
+          description: Not found
+
+  /employee/list:
+    get:
+      summary: List
+      tags:
+        - Employee
+      parameters:
+        - in: query
+          name: access_token
+          schema:
+            type: string
+          description: String of access_token
+          required: true
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: Number of records to get
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: Offset of returned records
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: true
+                data:
+                  - id: 1
+                    name: "name1"
+                    surname: "surname1"
+                    email: "email@mail.com"
+                    phone: "123456123"
+                    company:
+                        id: 1
+                        name: name1
+                        nip: "1234567891"
+                        address: address1
+                        city: city1
+                        postal_code: 12-121
+  /employee/company/{company_id}:
+    get:
+      summary: Employees by company
+      tags:
+        - Employee
+      parameters:
+        - in: query
+          name: access_token
+          schema:
+            type: string
+          description: String of access_token
+          required: true
+        - in: path
+          name: company_id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: true
+                data:
+                  - id: 1
+                    name: name1
+                    nip: "1234567891"
+                    address: address1
+                    city: city1
+                    postal_code: 12-121
+                    employees:
+                      - id: 1
+                        name: "name1"
+                        surname: "surname1"
+                        email: "email@mail.com"
+                        phone: "123456123"
+  /employee/new:
+    post:
+      summary: Create
+      tags:
+        - Employee
+      parameters:
+        - in: query
+          name: access_token
+          schema:
+            type: string
+          description: String of access_token
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                name: "name1"
+                surname: "surname1"
+                email: "email@mail.com"
+                phone: "123456123"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: true
+                data:
+                  id: 1
+                  name: "name1"
+                  surname: "surname1"
+                  email: "email@mail.com"
+                  phone: "123456123"
+  /employee/{id_read}:
+    get:
+      summary: Read
+      tags:
+        - Employee
+      parameters:
+        - in: query
+          name: access_token
+          schema:
+            type: string
+          description: String of access_token
+          required: true
+        - in: path
+          name: id_read
+          schema:
+            type: integer
+          description: Id of Employee
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: true
+                data:
+                  id: 1
+                  name: "name1"
+                  surname: "surname1"
+                  email: "email@mail.com"
+                  phone: "123456123"
+                  company:
+                      id: 1
+                      name: name1
+                      nip: "1234567891"
+                      address: address1
+                      city: city1
+                      postal_code: 12-121
+        '404':
+          description: Not found
+  /employee/{id_edit}:
+    put:
+      summary: Edit
+      tags:
+        - Employee
+      parameters:
+        - in: query
+          name: access_token
+          schema:
+            type: string
+          description: String of access_token
+          required: true
+        - in: path
+          name: id_edit
+          schema:
+            type: integer
+          description: Id of Employee
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                  name: "name1"
+                  surname: "surname1"
+                  email: "email@mail.com"
+                  phone: "123456123"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: true
+                data:
+                  id: 1
+                  name: "name1"
+                  surname: "surname1"
+                  email: "email@mail.com"
+                  phone: "123456123"
+        '404':
+          description: Not found
+  /employee/{id_delete}:
+    delete:
+      summary: Delete
+      tags:
+        - Employee
+      parameters:
+        - in: query
+          name: access_token
+          schema:
+            type: string
+          description: String of access_token
+          required: true
+        - in: path
+          name: id_delete
+          schema:
+            type: integer
+          description: Id of Employee
+          required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: true
+                message: Deleted
+        '404':
+          description: Not found
+
