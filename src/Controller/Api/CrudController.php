@@ -71,6 +71,7 @@ abstract class CrudController extends AbstractController
     #[Route('/new', methods: ['POST'])]
     public function create(Request $request, ValidatorInterface $validator): JsonResponse
     {
+        // disable filter to check unique records
         $this->disableSoftDeleted();
 
         $entity = new $this->entityClassName();
@@ -116,6 +117,7 @@ abstract class CrudController extends AbstractController
     #[Route('/{id}', methods: ['PUT'])]
     public function edit(int $id, Request $request, ValidatorInterface $validator): JsonResponse
     {
+        // disable filter to check unique records
         $this->disableSoftDeleted();
 
         $entity = $this->getEntityById($id);
@@ -254,8 +256,9 @@ abstract class CrudController extends AbstractController
      */
     protected function disableSoftDeleted()
     {
-        if ($this->entityManager->getFilters()->isEnabled('soft_delete')) {
-            $this->entityManager->getFilters()->disable('soft_delete');
+        $filters = $this->entityManager->getFilters();
+        if ($filters->has('soft_delete') && $filters->isEnabled('soft_delete')) {
+            $filters->disable('soft_delete');
         }
     }
 

@@ -23,14 +23,21 @@ abstract class ApiController extends WebTestCase
     protected function setUp(): void
     {
         $this->client = static::createClient();
-
         $this->manager = static::getContainer()->get('doctrine')->getManager();
-        if ($this->manager->getFilters()->isEnabled('soft_delete')) {
-            $this->manager->getFilters()->disable('soft_delete');
-        }
         $this->formFactory = Forms::createFormFactoryBuilder()->getFormFactory();
 
+        $this->removeListener('onFlush', '\Gedmo\SoftDeleteable\SoftDeleteableListener');
         $this->loginApiUser();
+    }
+
+    public function removeListener(string $eventName, string $listenerName)
+    {
+        foreach ($this->manager->getEventManager()->getListeners($eventName) as $listener) {
+            if ($listener instanceof $listenerName) {
+                // remove the SoftDeletableSubscriber event listener
+                $this->manager->getEventManager()->removeEventListener($eventName, $listener);
+            }
+        }
     }
 
     protected function loginApiUser()

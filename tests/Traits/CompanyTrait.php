@@ -1,5 +1,5 @@
 <?php
-namespace App\Tests;
+namespace App\Tests\Traits;
 
 trait CompanyTrait
 {

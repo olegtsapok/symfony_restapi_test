@@ -2,7 +2,7 @@
 namespace App\Tests\Controller;
 
 use App\Entity\{Company, Employee};
-use App\Tests\{CompanyTrait, EmployeeTrait};
+use App\Tests\Traits\{CompanyTrait, EmployeeTrait};
 
 final class EmployeeApiControllerTest extends ApiController
 {
@@ -99,10 +99,6 @@ final class EmployeeApiControllerTest extends ApiController
 
     public function testDelete(): void
     {
-        if (!$this->manager->getFilters()->isEnabled('soft_delete')) {
-            $this->manager->getFilters()->enable('soft_delete');
-        }
-
         $entity = $this->createEmployee(5);
         $employee     = $this->repository->findOneById($entity->getId());
         self::assertNotEmpty($employee);
@@ -111,8 +107,6 @@ final class EmployeeApiControllerTest extends ApiController
 
         $employee = $this->repository->findOneById($entity->getId());
         self::assertEmpty($employee);
-
-        $this->manager->getFilters()->disable('soft_delete');
     }
 
     public function testEmployees(): void

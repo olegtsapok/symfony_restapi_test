@@ -2,7 +2,7 @@
 namespace App\Tests\Controller;
 
 use App\Entity\Company;
-use App\Tests\CompanyTrait;
+use App\Tests\Traits\CompanyTrait;
 
 final class CompanyApiControllerTest extends ApiController
 {
@@ -101,10 +101,6 @@ final class CompanyApiControllerTest extends ApiController
 
     public function testDelete(): void
     {
-        if (!$this->manager->getFilters()->isEnabled('soft_delete')) {
-            $this->manager->getFilters()->enable('soft_delete');
-        }
-
         $companyData = $this->getCompanyDummyData(6);
         $entity      = $this->createEntity($this->entityName, $companyData);
         $company     = $this->repository->findOneById($entity->getId());
@@ -114,7 +110,5 @@ final class CompanyApiControllerTest extends ApiController
 
         $company = $this->repository->findOneById($entity->getId());
         self::assertEmpty($company);
-
-        $this->manager->getFilters()->disable('soft_delete');
     }
 }
