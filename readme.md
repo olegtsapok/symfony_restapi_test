@@ -22,5 +22,5 @@ Instead of deleting, field deletedAt will be populated on delete action and will
 6. Swagger file with description of how to use all endpoints. Can be viewed online by https://editor.swagger.io/
 https://github.com/olegtsapok/symfony_restapi_test/tree/master/swagger/swagger_openapi.yaml
 
-7. Deploymend steps:
+7. Deployment steps:
 https://github.com/olegtsapok/symfony_restapi_test/blob/master/deployment.md
